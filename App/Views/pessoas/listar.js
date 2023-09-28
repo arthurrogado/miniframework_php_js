@@ -1,22 +1,21 @@
 // listar.js
-// (/pessoas/listar)
-import Info from '/App/components/InfoBox.js'
-// para informar à IDE que deve procurar o arquivo na pasta public/App/App.js
-// e não na pasta App/Views/pessoas/listar/App/App.js
-import HttpClient from '/App/App.js'
+// /pessoas/listar
+import HttpClient from "/App/App.js"
+const httpClient = new HttpClient()
 
-const deletePessoa = async (id) => {
+const deletePessoa = async (tdItem, nome = '') => {
     let formdata = new FormData()
-    formdata.append('id', id)
+    console.log(tdItem)
+    console.log(tdItem.getAttribute('data-id'))
+    formdata.append('id', tdItem.getAttribute('data-id'))
     let response = await fetch(`/api.php/pessoas/delete`, {
         method: 'POST',
         body: formdata
     })
     response = await response.json()
     if(response.ok) {
-        new Info('#pessoas', "Pessoa deletada com sucesso!")
-        const httpClient = new HttpClient()
-        httpClient.alert('Pessoa deletada com sucesso!')
+        new httpClient.Info(`Pessoa ${nome} deletada com sucesso!`, 'success')
+        tdItem.remove()
         // window.location.reload()
     }
 }
@@ -31,6 +30,7 @@ const listarPessoas = async () => {
     let tbody = document.querySelector('#tablePessoas tbody') 
     pessoas.forEach(pessoa => {
         let row = document.createElement('tr')
+        row.setAttribute('data-id', pessoa.id)
         
         let tdId = document.createElement('td')
         tdId.innerHTML = pessoa.id
@@ -44,7 +44,7 @@ const listarPessoas = async () => {
         let button = document.createElement('button')
         button.innerHTML = 'Deletar'
         button.addEventListener('click', (e) => {
-            deletePessoa(pessoa.id)
+            deletePessoa(row, pessoa.nome)
         })
         tdButton.appendChild(button)
         row.appendChild(tdButton)
