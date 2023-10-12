@@ -15,7 +15,7 @@ class Route extends Bootstrap {
 
         $routes['home'] = array(
             'route' => '/',
-            'controller' => 'IndexController',
+            'controller' => 'Pages/Home',
             'action' => 'index'
         );
 
@@ -33,8 +33,8 @@ class Route extends Bootstrap {
 
         $routes['produtos'] = array(
             'route' => '/produtos',
-            'controller' => 'IndexController',
-            'action' => 'produtos'
+            'controller' => 'Pages/Produtos',
+            'action' => 'listar'
         );
 
         $routes['pessoas'] = array(
@@ -43,13 +43,13 @@ class Route extends Bootstrap {
         );
         $routes['listar_pessoas'] = array(
             'route' => '/pessoas/listar',
-            'controller' => 'PessoasController',
-            'action' => 'PessoasListar'
+            'controller' => 'Pages/Pessoas',
+            'action' => 'listar'
         );
-        $routes["criar_pessoa"] = array(
+        $routes["page_criar_pessoa"] = array(
             "route" => "/pessoas/criar",
-            "controller" => "PessoasController",
-            "action" => "criarPessoa"
+            "controller" => "Pages/Pessoas",
+            "action" => "criar"
         );
         $routes['create_pessoa'] = array(
             'route' => '/pessoas/create',
@@ -67,7 +67,13 @@ class Route extends Bootstrap {
             'action' => 'deletePessoa'
         );
 
-        
+        // LOGIN
+
+        $routes['login'] = array(
+            'route' => '/login',
+            'controller' => 'Pages/Login',
+            'action' => 'index'
+        );
 
         $this->setRoutes($routes);
     }

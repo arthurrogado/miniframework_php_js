@@ -30,6 +30,10 @@ abstract class Bootstrap {
             }
             
             if(isset($route['route']) && $url == $route['route']) {
+
+                // renomear, por exemplo, o controller "Pages/Pessoas" para "Pages\Pessoas"
+                $route['controller'] = str_replace("/", "\\", $route['controller']);
+
                 $class = "App\\Controllers\\".ucfirst($route['controller']);
                 $controller = new $class;
                 $action = $route['action'];

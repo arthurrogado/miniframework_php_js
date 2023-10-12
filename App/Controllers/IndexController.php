@@ -4,16 +4,16 @@ namespace App\Controllers;
 
 // Recursos do miniframework
 use MF\Controller\Action;
-use MF\Model\Container;
+use MF\Model\Container; // dependency container: allows to instantiate models
 
 // Modelos
 use App\Models\info;
 use App\Models\Produto;
 
 class IndexController extends Action {
-    public function index() {
-        $this->render("index");
-    }
+    // public function index() {
+    //     $this->render("index");
+    // }
 
     public function sobreNos() {
 
@@ -34,9 +34,8 @@ class IndexController extends Action {
 
     public function contato() {
 
-        $produto = Container::getModel('Produto');
-
-        $produtos = $produto->getProdutos();
+        // $produto = Container::getModel('Produto');
+        // $produtos = $produto->getProdutos();
 
         $this->render("contato");
     }

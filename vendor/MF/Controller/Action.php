@@ -14,11 +14,16 @@ abstract class Action {
 
     public function render($view) {
         
+        // Get the current class name, like: "App\Controllers\IndexController"
         $currentClass = get_class($this);
-        $currentClass = str_replace("App\\Controllers\\", "", $currentClass);
-        $currentClass = strtolower(str_replace("Controller", "", $currentClass));
+        // Remove the namespace, and the word "Controller", so we get: "Index"
+        // if the controller is inside a subfolder, like: "App\Controllers\Pages\Pessoas" we get: "Pages\Pessoas" 
+        // and we need to remove the "Pages\" part, because view files are inside the "App/Views" folder
 
-        // Tentar encontrar o arquivo .phtml, se não encontrar, tentar encontrar o .html
+        $currentClass = str_replace("App\\Controllers\\", "", $currentClass);
+        $currentClass = str_replace("Controller", "", $currentClass);
+        $currentClass = str_replace("Pages\\", "", $currentClass); // now we have: "Pessoas"
+        $currentClass = strtolower( $currentClass );
 
         // criar array com as variáveis que serão usadas na view: html, css, js, etc
         $result = array();
@@ -38,7 +43,7 @@ abstract class Action {
         }
         
         else {
-            echo "View não encontrada";
+            echo "View não encontrada. Current class: " . $currentClass . " View: " . $view . ".phtml <br> Caminho: ../App/Views/" . $currentClass . "/" . $view . ".phtml";
         }
 
         

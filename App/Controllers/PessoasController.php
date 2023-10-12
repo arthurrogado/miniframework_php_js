@@ -3,19 +3,13 @@
 namespace App\Controllers;
 
 use MF\Controller\Action;
-use MF\Model\Container;
+use MF\Model\Container; // dependency container: allows to instantiate models:
+// this is a way to instantiate models without using the new keyword
 
+// Models
 use App\Models\Pessoa;
 
 class PessoasController extends Action {
-
-    public function PessoasListar() {
-        $this->render("listar");
-    }
-
-    public function criarPessoa() {
-        $this->render("criar");
-    }
 
     public function createPessoa() {
         $nome = $_POST['nome'];
