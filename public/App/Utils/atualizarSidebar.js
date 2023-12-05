@@ -40,27 +40,36 @@ function atualizarSidebar(){
             let usuario = response.usuario
             document.querySelector('nav').classList.add('active')
             document.querySelector('nav').classList.remove('hidden')
-
+            
+            let itens = [];
+            
             if(usuario.id == 1){ // ADMIN
-                popularMenuItems([
-                    ['/home', 'Home', 'fa-home'],
-                    // ['obras', 'Minhas Obras', 'fa-building'],
-                    // ['colaboradores', 'Colaboradores', 'fa-users'],
+                itens = [
+                    ['/configuracoes', 'Configurações', 'fa-cog'],
+                ];
 
-                    ['/escritorio/listar', 'Escritórios', 'fa-briefcase'],
-                    ['/usuarios', 'Usuários', 'fa-users'],
-                    ['/orcamentos', 'Orçamentos', 'fa-folder'],
-                ])
-
-            // Usuário comum
-            } else if(usuario.id !== 1) {
-                popularMenuItems([
-                    ['/home', 'Home', 'fa-solid fa-home'],
-                    ['/orcamentos', 'Orçamentos', 'fa-folder'],
-                ])
+                // Usuário comum
             } else {
-                popularMenuItems([])
+                itens = [
+                    ['/home', 'Home', 'fa-solid fa-home'],
+                ]
             }
+
+            // Nesse exemplo de uso é possível determinar diferentes menus baseados no usuário
+            
+            // popularMenuItems(itens)
+
+            popularMenuItems([
+                ['/home', 'Home', 'fa-home'],
+                ['/sobre_nos', 'Sobre Nós', 'fa-info-circle'],
+                ['/contato', 'Contato', 'fa-envelope'],
+                ['/produtos', 'Produtos', 'fa-th'],
+                ['/pessoas/listar', 'Pessoas', 'fa-users'],
+                ['/pessoas/criar', 'Criar Pessoa', 'fa-user-plus'],
+                ['/login', 'Login', 'fa-sign-in'],
+                ['/logout', 'Logout', 'fa-sign-out'],
+            ])
+            
         }
 
         else { // NÃO LOGADO

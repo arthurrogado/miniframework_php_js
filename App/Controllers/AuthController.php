@@ -27,6 +27,22 @@ class AuthController {
         }
     }
 
+    public function checkLogin()
+    {
+        // retornar dados do usuárioo logado (só não a senha)
+        $user = Container::getModel("Usuario");
+        $status = $user->checkLogin();
+
+        if($status) {
+            // Tirar o atributo "senha" do stdClass $status
+            unset($status->senha);
+            echo json_encode(array('ok' => true, "usuario" => $status));
+        } else {
+            echo json_encode(array('ok' => false, "status" => "Pelo jeito não está logado" ));
+        }
+
+    }
+
 }
 
 ?>

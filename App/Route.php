@@ -103,8 +103,12 @@ class Route extends Bootstrap {
             'action' => 'login',
             'public' => true
         );
-
-        // LOGOUT
+        array_push($routes,[
+            'route' => '/api/usuario/check_login',
+            'controller' => 'AuthController',
+            'action' => 'checkLogin',
+            'public' => true
+        ]);
         $routes['logout'] = array(
             'route' => '/logout',
             'controller' => 'AuthController',

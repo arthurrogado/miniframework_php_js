@@ -34,6 +34,10 @@ function updatePath(path, params = null) {
 }
 
 const navigateTo = (path, params = null) => {
+    // Colocar um #loading na main
+    document.querySelector(main).innerHTML = '<div id="loading"></div>'
+
+
     // If it is a window popstate event, get the path from the event
     if (path instanceof PopStateEvent) {
         path = window.location.pathname
