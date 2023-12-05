@@ -2,23 +2,23 @@
 
 namespace App\Controllers;
 
-use MF\Controller\Action;
+// use MF\Controller\Action;
 use MF\Model\Container; // dependency container: allows to instantiate models:
 // this is a way to instantiate models without using the new keyword
 
 // Models
-use App\Models\Pessoa;
+// use App\Models\Pessoa;
 
-class PessoasController extends Action {
+class PessoasController {
 
     public function createPessoa() {
         $nome = $_POST['nome'];
+        $usuario = filter_input(INPUT_POST, 'usuario');
+        $senha = filter_input(INPUT_POST, 'senha');
+        $senha = password_hash($senha, PASSWORD_DEFAULT);
+
         $pessoa = Container::getModel("Pessoa");
-        if($pessoa->createPessoa($nome)) {
-            echo json_encode(array('ok' => true));
-        } else {
-            echo json_encode(array('ok' => false));
-        }
+        return $pessoa->createPessoa($nome, $usuario, $senha);
     }
 
     public function getPessoas() {

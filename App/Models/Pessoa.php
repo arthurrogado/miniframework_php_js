@@ -5,11 +5,21 @@ use MF\Model\Model;
 
 class Pessoa extends Model {
 
-    public function createPessoa($nome) {
-        $query = "INSERT INTO tb_pessoas(nome) VALUES(:nome)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(":nome", $nome);
-        return $stmt->execute();
+    // public function createPessoa($nome, $usuario, $senha) {
+    //     $query = "INSERT INTO tb_pessoas(nome, usuario, senha) VALUES(:nome, :usuario, :senha)";
+    //     $stmt = $this->db->prepare($query);
+    //     $stmt->bindValue(":nome", $nome);
+    //     $stmt->bindValue(":usuario", $usuario);
+    //     $stmt->bindValue(":senha", $senha);
+    //     return $stmt->execute();
+    // }
+
+    public function createPessoa($nome, $usuario, $senha) {
+        return $this->insert(
+            "tb_pessoas",
+            ["nome", "usuario", "senha"],
+            [$nome, $usuario, $senha]
+        );
     }
 
     public function getPessoas() {

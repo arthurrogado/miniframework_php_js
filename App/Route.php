@@ -7,6 +7,8 @@ class Route extends Bootstrap {
 
     public function initRoutes() {
 
+        session_start();
+
         $routes['404'] = array(
             'route' => '/404',
             'controller' => 'IndexController',
@@ -37,6 +39,7 @@ class Route extends Bootstrap {
             'action' => 'listar'
         );
 
+        // PESSOAS //
         $routes['pessoas'] = array(
             'route' => '/pessoas',
             'redirect' => '/pessoas/listar'
@@ -44,7 +47,7 @@ class Route extends Bootstrap {
         $routes['listar_pessoas'] = array(
             'route' => '/pessoas/listar',
             'controller' => 'Pages/Pessoas',
-            'action' => 'listar'
+            'action' => 'listar',
         );
         $routes["page_criar_pessoa"] = array(
             "route" => "/pessoas/criar",
@@ -54,7 +57,8 @@ class Route extends Bootstrap {
         $routes['create_pessoa'] = array(
             'route' => '/pessoas/create',
             'controller' => 'PessoasController',
-            'action' => 'createPessoa'
+            'action' => 'createPessoa',
+            'middlewares' => ['AuthMiddleware']
         );
         $routes['get_pessoas'] = array(
             'route' => '/pessoas/get_pessoas',
@@ -66,13 +70,29 @@ class Route extends Bootstrap {
             'controller' => 'PessoasController',
             'action' => 'deletePessoa'
         );
+        // //
+
 
         // LOGIN
 
-        $routes['login'] = array(
+        $routes['tela_login'] = array(
             'route' => '/login',
             'controller' => 'Pages/Login',
-            'action' => 'index'
+            'action' => 'index',
+            'public' => true
+        );
+        $routes['login'] = array(
+            'route' => '/login/login',
+            'controller' => 'AuthController',
+            'action' => 'login',
+            'public' => true
+        );
+
+        // LOGOUT
+        $routes['logout'] = array(
+            'route' => '/logout',
+            'controller' => 'AuthController',
+            'action' => 'logout',
         );
 
         $this->setRoutes($routes);

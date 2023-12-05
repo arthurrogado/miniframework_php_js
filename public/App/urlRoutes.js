@@ -41,6 +41,11 @@ const urlRoutes = {
         title: 'Criar pessoa',
         route: '/pessoas/criar',
         description: 'Página de criação de pessoas.',
+    },
+    "/login": {
+        title: 'Login',
+        route: '/login',
+        description: 'Página de login.',
     }
 }
 

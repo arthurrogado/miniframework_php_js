@@ -19,6 +19,7 @@ function updatePath(path, params = null) {
     // let pathname = originalPathname.endsWith('/') ? originalPathname.slice(0, -1) : originalPathname // if the pathname ends with '/', remove it
 
     // window.history.pushState({}, path, origin + pathname + '#' + path + params)
+    params = params ? '?' + params : ''
     window.history.pushState({}, '', path + params)
 }
 
@@ -33,28 +34,36 @@ const navigateTo = (path, params = null) => {
     params = params ? makeUrlParams(params) : ''
     // Update the url
     updatePath(path, params)
+
     // Then calls the urlLocationHandler
     urlLocationHandler()
+
 }
 
 const urlLocationHandler = async () => {
     let path = window.location.pathname
 
-    const route = urlRoutes[path] || urlRoutes[404]
-    if(route.redirect) {
-        window.history.pushState({}, '', route.redirect)
-        navigateTo(route.redirect)
-    } else if(route.template) {
-        await fetch(`${route.template}`)
-        .then(response => response.text())
-        .then(data => {
-            document.querySelector(main).innerHTML = data
-        })
-        console.log('route: ', route)
-    } else (
-        loadPage(route.route)
-    )
-    
+    if(path == '/') {
+        path = '/home'
+        updatePath(path)
+    }
+
+    loadPage(path)
+
+    // const route = urlRoutes[path] || urlRoutes[404]
+    // if(route.redirect) {
+    //     window.history.pushState({}, '', route.redirect)
+    //     navigateTo(route.redirect)
+    // } else if(route.template) {
+    //     await fetch(`${route.template}`)
+    //     .then(response => response.text())
+    //     .then(data => {
+    //         document.querySelector(main).innerHTML = data
+    //     })
+    //     console.log('route: ', route)
+    // } else (
+    //     pass
+    // )
 }
 
 async function loadPage(path) {
@@ -66,6 +75,11 @@ async function loadPage(path) {
     let response = await fetch(url, { signal })
     response = await response.json()
     console.log('response: ', response)
+
+    if(response.redirect) {
+        navigateTo(response.redirect)
+        return
+    }
 
     document.querySelector(main).innerHTML = response?.html
     document.querySelector(main).innerHTML += `<style>${response?.css}</style>`
@@ -138,7 +152,7 @@ class HttpClient {
     }
     
 }
-
+window.HttpClient = HttpClient
 
 
 export default HttpClient;
