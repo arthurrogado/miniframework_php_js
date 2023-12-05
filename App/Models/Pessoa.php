@@ -5,16 +5,8 @@ use MF\Model\Model;
 
 class Pessoa extends Model {
 
-    // public function createPessoa($nome, $usuario, $senha) {
-    //     $query = "INSERT INTO tb_pessoas(nome, usuario, senha) VALUES(:nome, :usuario, :senha)";
-    //     $stmt = $this->db->prepare($query);
-    //     $stmt->bindValue(":nome", $nome);
-    //     $stmt->bindValue(":usuario", $usuario);
-    //     $stmt->bindValue(":senha", $senha);
-    //     return $stmt->execute();
-    // }
-
-    public function createPessoa($nome, $usuario, $senha) {
+    public function createPessoa($nome, $usuario, $senha) 
+    {
         return $this->insert(
             "tb_pessoas",
             ["nome", "usuario", "senha"],
@@ -22,17 +14,39 @@ class Pessoa extends Model {
         );
     }
 
-    public function getPessoas() {
-        $query = "SELECT id, nome FROM tb_pessoas";
-        return $this->db->query($query)->fetchAll();
+    public function getPessoas() 
+    {
+        return $this->select(
+            'tb_pessoas',
+            ['*']
+        );
     }
 
-    public function deletePessoa($id) {
-        $query = "DELETE FROM tb_pessoas WHERE id = :id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(":id", $id);
-        $stmt->execute();
-        return $stmt->rowCount() > 0;
+    public function getPessoa($id)
+    {
+        return $this->selectOne(
+            'tb_pessoas',
+            ['*'],
+            "id = $id"
+        );
+    }
+
+    public function deletePessoa($id) 
+    {
+        return $this->delete(
+            "tb_pessoas",
+            "id = $id"
+        );
+    }
+
+    public function updatePessoa($id, $nome, $usuario, $senha) 
+    {
+        return $this->update(
+            "tb_pessoas",
+            ["nome", "usuario", "senha"],
+            [$nome, $usuario, $senha],
+            "id = $id"
+        );
     }
 
 }

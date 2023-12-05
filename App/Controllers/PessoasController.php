@@ -11,35 +11,73 @@ use MF\Model\Container; // dependency container: allows to instantiate models:
 
 class PessoasController {
 
-    public function createPessoa() {
+    public function createPessoa() 
+    {
         $nome = $_POST['nome'];
         $usuario = filter_input(INPUT_POST, 'usuario');
         $senha = filter_input(INPUT_POST, 'senha');
         $senha = password_hash($senha, PASSWORD_DEFAULT);
 
         $pessoa = Container::getModel("Pessoa");
-        return $pessoa->createPessoa($nome, $usuario, $senha);
+        $status = $pessoa->createPessoa($nome, $usuario, $senha);
+        if($status['ok']) {
+            echo json_encode(array('ok' => true, 'message' => "Pessoa criada com sucesso"));
+        } else {
+            echo json_encode(array('ok' => false, 'message' => "Erro: " . $status['message'] ));
+        }
     }
 
-    public function getPessoas() {
+    public function getPessoas() 
+    {
         $pessoa = Container::getModel("Pessoa");
-        $pessoas = $pessoa->getPessoas();
-        echo json_encode(array('pessoas' => $pessoas));
+        $status = $pessoa->getPessoas();
+        if($status['ok']) {
+            echo json_encode(array('ok' => true, 'pessoas' => $status['data']));
+        } else {
+            echo json_encode(array('ok' => false, 'message' => "Erro: " . $status['message'] ));
+        }
     }
 
-    public function deletePessoa() {
+    public function getPessoa()
+    {
         $id = filter_input(INPUT_POST, 'id');
         $pessoa = Container::getModel("Pessoa");
-        if($pessoa->deletePessoa($id)) {
+        $status = $pessoa->getPessoa($id);
+        if($status['ok']) {
+            echo json_encode(array('ok' => true, 'pessoa' => $status['data']));
+        } else {
+            echo json_encode(array('ok' => false, 'message' => "Erro: " . $status['message'] ));
+        }
+    }
+
+    public function deletarPessoa() 
+    {
+        $id = filter_input(INPUT_POST, 'id');
+        $pessoa = Container::getModel("Pessoa");
+        $status = $pessoa->deletePessoa($id);
+        if($status['ok']) {
+            echo json_encode(array('ok' => true, 'message' => "Pessoa deletada com sucesso"));
+        } else {
+            echo json_encode(array('ok' => false, 'message' => "Erro: " . $status['message'] ));
+        }
+    }
+
+    public function updatePessoa() 
+    {
+        $id = filter_input(INPUT_POST, 'id');
+        $nome = filter_input(INPUT_POST, 'nome');
+        $usuario = filter_input(INPUT_POST, 'usuario');
+        $senha = filter_input(INPUT_POST, 'senha');
+        $senha = password_hash($senha, PASSWORD_DEFAULT);
+
+        $pessoa = Container::getModel("Pessoa");
+        if($pessoa->update($id, $nome, $usuario, $senha)) {
             echo json_encode(array('ok' => true));
         } else {
             echo json_encode(array('ok' => false));
         }
+    
     }
-
-    // para diferenciar os métodos de renderização de páginas e os métodos que executam ações,
-    // os métodos que executam ações devem ser iniciados com um underline
-    // ou 
 
 }
 

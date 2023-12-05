@@ -16,10 +16,24 @@
 
     <div id="app">
 
-        <header>Aplicativo</header>
+        <header id="headerApp">
+
+            <div>
+                <div id="controlSidebar">
+                    <i class="fa fa-bars"></i>
+                </div>
+                Aplicativo
+            </div>
+
+            <div id="informacoesUsuario">
+                <div id="nomeUsuario"></div>
+                <a href="/logout" class="w3-round-large w3-red w3-tag">Sair</a>
+            </div>
+        </header>
 
         <div id="content">
-            <nav>
+
+            <nav class="active">
                 <div class="nav-item" href="/sobre_nos">Sobre Nós</div>
                 <div class="nav-item" href="/contato">Contato</div>
                 <div class="nav-item" href="/produtos">Produtos</div>
@@ -29,9 +43,8 @@
                 <div class="nav-item" href="/login">Login</div>
                 <div class="nav-item" style="background: rgb(255, 158, 141);" href="/logout">Logout</div>
             </nav>
+            
             <main></main>
-
-            <!-- <iframe src="" style="border: 1px solid red; width: 100%;"></iframe> -->
 
         </div>
 

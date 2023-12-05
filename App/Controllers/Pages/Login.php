@@ -9,6 +9,10 @@ class Login extends Action {
         $this->render("login");
     }
 
+    public function login() {
+        $this->render("login");
+    }
+
 }
 
 ?>

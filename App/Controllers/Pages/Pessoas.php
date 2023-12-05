@@ -5,12 +5,19 @@ use MF\Controller\Action;
 
 class Pessoas extends Action {
 
-    public function listar() {
+    public function listar() 
+    {
         $this->render("listar");
     }
 
-    public function criar() {
+    public function criar() 
+    {
         $this->render("criar");
+    }
+
+    public function visualizar()
+    {
+        $this->render("visualizar");
     }
 
 }

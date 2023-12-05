@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use App\Config\Config;
 
 class Connection {
 
@@ -8,9 +9,9 @@ class Connection {
         try{
 
             $conn = new \PDO(
-                "mysql:host=localhost; dbname=mvc; charset=utf8",
-                "root",
-                ""
+                "mysql: host=".Config::$host."; dbname=".Config::$dbname,
+                Config::$user,
+                Config::$password
             );
 
             return $conn;

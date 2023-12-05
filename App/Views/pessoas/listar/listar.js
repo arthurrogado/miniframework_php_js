@@ -4,26 +4,17 @@ import HttpClient from "/App/App.js"
 const httpClient = new HttpClient()
 
 const deletePessoa = async (tdItem, nome = '') => {
-    let formdata = new FormData()
-    console.log(tdItem)
-    console.log(tdItem.getAttribute('data-id'))
-    formdata.append('id', tdItem.getAttribute('data-id'))
-    let response = await fetch(`/api.php/pessoas/delete`, {
-        method: 'POST',
-        body: formdata
-    })
-    response = await response.json()
+
+    const response = await httpClient.makeRequest('/api/pessoas/deletar', {id: tdItem.getAttribute('data-id')})
     if(response.ok) {
-        new httpClient.Info(`Pessoa ${nome} deletada com sucesso!`, 'success')
         tdItem.remove()
-        // window.location.reload()
     }
 }
 
 const listarPessoas = async () => {
     await new Promise(resolve => setTimeout(resolve, 500))
-    let response = await fetch('/api.php/pessoas/get_pessoas')
-    response = await response.json()
+    let response = await httpClient.makeRequest('/api/pessoas/listar')
+
     const pessoas = response.pessoas
     document.querySelector('#loading').style.display = 'none'
 

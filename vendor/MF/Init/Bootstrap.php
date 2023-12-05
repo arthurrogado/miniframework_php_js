@@ -62,7 +62,7 @@ abstract class Bootstrap {
 
             if(isset($route['route']) && $url == $route['route']) {
 
-                // verify if the route is public, if not, verify if the user is logged in
+                // Verify if the route is public, if not, verify if the user is logged in
                 if(!isset($route['public']) || (isset($route['public']) && $route['public'] == false)) {
                     // session_start();
                     if(!isset($_SESSION['usuario']) || $_SESSION['usuario'] == '') {
@@ -94,8 +94,12 @@ abstract class Bootstrap {
     }
 
     protected function getUrl() {
-        return parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);
-        //return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        // return parse_url($_SERVER['PATH_INFO'], PHP_URL_PATH);
+        
+        $request_url = $_SERVER['REQUEST_URI'];
+        // Remover o primeiro "/api" da url, usado apenas para referência
+        $request_url = substr($request_url, 4);
+        return parse_url( $request_url , PHP_URL_PATH);
     }
 
 }

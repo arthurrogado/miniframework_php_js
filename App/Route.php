@@ -39,38 +39,54 @@ class Route extends Bootstrap {
             'action' => 'listar'
         );
 
+
         // PESSOAS //
         $routes['pessoas'] = array(
             'route' => '/pessoas',
             'redirect' => '/pessoas/listar'
         );
-        $routes['listar_pessoas'] = array(
+            // pages
+        array_push($routes, [
             'route' => '/pessoas/listar',
             'controller' => 'Pages/Pessoas',
-            'action' => 'listar',
-        );
-        $routes["page_criar_pessoa"] = array(
+            'action' => 'listar'
+        ]);
+        array_push($routes, [
             "route" => "/pessoas/criar",
             "controller" => "Pages/Pessoas",
             "action" => "criar"
-        );
-        $routes['create_pessoa'] = array(
-            'route' => '/pessoas/create',
-            'controller' => 'PessoasController',
-            'action' => 'createPessoa',
-            'middlewares' => ['AuthMiddleware']
-        );
-        $routes['get_pessoas'] = array(
-            'route' => '/pessoas/get_pessoas',
+        ]);
+        array_push($routes, [
+            "route" => "/pessoas/visualizar",
+            "controller" => "Pages/Pessoas",
+            "action" => "visualizar"
+        ]);
+            // api
+        array_push($routes, [
+            'route' => '/api/pessoas/listar',
             'controller' => 'PessoasController',
             'action' => 'getPessoas'
-        );
-        $routes['delete_pessoa'] = array(
-            'route' => '/pessoas/delete',
+        ]);
+        array_push($routes, [
+            'route' => '/api/pessoas/criar',
             'controller' => 'PessoasController',
-            'action' => 'deletePessoa'
-        );
-        // //
+            'action' => 'createPessoa'
+        ]);
+        array_push($routes, [
+            'route' => '/api/pessoas/visualizar',
+            'controller' => 'PessoasController',
+            'action' => 'getPessoa'
+        ]);
+        array_push($routes, [
+            'route' => '/api/pessoas/editar',
+            'controller' => 'PessoasController',
+            'action' => 'editar'
+        ]);
+        array_push($routes, [
+            'route' => '/api/pessoas/deletar',
+            'controller' => 'PessoasController',
+            'action' => 'deletarPessoa'
+        ]);
 
 
         // LOGIN
@@ -82,7 +98,7 @@ class Route extends Bootstrap {
             'public' => true
         );
         $routes['login'] = array(
-            'route' => '/login/login',
+            'route' => '/api/login',
             'controller' => 'AuthController',
             'action' => 'login',
             'public' => true

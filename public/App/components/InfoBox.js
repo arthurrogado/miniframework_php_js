@@ -5,6 +5,15 @@ class infoBox {
 
         let style = document.createElement('style');
 
+        // make msg wrap if it is too long (more than 300px).
+        // if it is too long, break line
+        // get size of the msg in pixels
+        let size = Number( msg.length ) * 8
+        
+        if (size > 300) {
+            msg = msg.substring(0, 300) + '...';
+        }
+
         // let _info = `
         //     background: #ffb1ab;
         //     padding: 20px;
@@ -39,6 +48,7 @@ class infoBox {
             }
 
             .infoBox${hash} {
+                z-index: 9999;
                 width: 300px;
                 background-color: var(--${theme});
                 padding: 15px;
@@ -89,7 +99,7 @@ class infoBox {
 
             .area-infos {
                 position: fixed;
-                top: 10px;
+                top: 70px;
                 right: 10px;
                 display: flex;
                 flex-direction: column;
