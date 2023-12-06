@@ -5,61 +5,30 @@ use MF\Model\Model;
 
 class Usuario extends Model
 {
-    private $id;
-    private $nome;
-    private $usuario;
-    private $id_escritorio;
-
-    public function __get($attr) {
-        return $this->$attr;
-    }
-
-    public function __set($attr, $value) {
-        $this->$attr = $value;
-    }
-
-    public static function getUsuario($id) {
-        self::getConn();
-        $query = "SELECT id, nome FROM tb_usuarios WHERE id = :id";
-        $stmt = self::$conn->prepare($query);
-        $stmt->bindValue(":id", $id);
-        $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_OBJ);
-    }
-
-    public function criar($nome, $usuario, $senha, $categoria, $cpf, $telefone, $id_escritorio)
+    
+    public function criarUsuario($nome, $usuario, $senha)
     {
         $senha = password_hash($senha, PASSWORD_DEFAULT);
         return $this->insert(
             "usuarios",
             [
-                "nome", "usuario", "senha", "categoria", "cpf", "telefone", "id_escritorio"
+                "nome", "usuario", "senha"
             ],
             [
-                $nome, $usuario, $senha, $categoria, $cpf, $telefone, $id_escritorio
+                $nome, $usuario, $senha
             ]
         );
     }
 
-    public function editar($id, $nome, $usuario, $categoria, $cpf, $telefone, $id_escritorio)
+    public function getUsuarios()
     {
-        return $this->update(
+        return $this->select(
             "usuarios",
-            ["nome", "usuario", "categoria", "cpf", "telefone", "id_escritorio"],
-            [$nome, $usuario, $categoria, $cpf, $telefone, $id_escritorio],
-            "id = $id"
+            ["id", "nome", "usuario"]
         );
     }
 
-    public function excluir($id)
-    {
-        return $this->delete(
-            "usuarios",
-            "id = $id"
-        );
-    }
-
-    public function visualizar($id)
+    public function visualizarUsuario($id)
     {
         return $this->selectOne(
             "usuarios",
@@ -67,8 +36,18 @@ class Usuario extends Model
             "id = $id"
         );
     }
+        
+    public function editarUsuario($id, $nome, $usuario)
+    {
+        return $this->update(
+            "usuarios",
+            ["nome", "usuario"],
+            [$nome, $usuario],
+            "id = $id"
+        );
+    }
 
-    public function mudarSenha($id, $senha)
+    public function mudarSenhaUsuario($id, $senha)
     {
         $senha = password_hash($senha, PASSWORD_DEFAULT);
         return $this->update(
@@ -79,7 +58,13 @@ class Usuario extends Model
         );
     }
 
-
+    public function excluirUsuario($id)
+    {
+        return $this->delete(
+            "usuarios",
+            "id = $id"
+        );
+    }
 
     public static function checkLogin() {
         // session_start();
@@ -115,14 +100,6 @@ class Usuario extends Model
     public static function logout() {
         // session_start();
         return session_destroy();
-    }
-
-    public function getUsuarios() {
-        // self::getConn();
-        return self::select(
-            "usuarios",
-            ["id", "nome"]
-        );
     }
 
 }

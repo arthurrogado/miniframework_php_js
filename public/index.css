@@ -91,6 +91,11 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
+    position: sticky;
+    top: 0;
+
+    height: 4rem;
 }
 #headerApp > div {
     display: flex;
@@ -119,7 +124,7 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: calc(100vh - 5rem);
+    height: calc(100% - 4rem);
 }
 
 

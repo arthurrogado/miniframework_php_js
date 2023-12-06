@@ -4,9 +4,7 @@
 
 // require_once './App/Model/Usuario.php';
 namespace App\Middlewares;
-
 use App\Models\Usuario;
-use MF\Model\Container;
 
 class PermissionMiddleware {
 
@@ -34,18 +32,14 @@ class PermissionMiddleware {
 
 }
 
-# exemplo de uso para verificar se o id_escritorio do usuario logado é igual ao id_escritorio da obra
+# exemplo de uso para verificar se o id_escritorio do usuario logado é igual ao id_escritorio da obra 
+# (ou qualquer outro dado da sua regra de negócio)
 // $conditions = [
 //     "id_escritorio" => $obra->id_escritorio
 // ];
 // PermissionMiddleware::checkConditions($conditions);
 
-# mas para parar a execução do código, é necessário fazer assim:
-// if( !PermissionMiddleware::checkConditions($conditions) ) {
-    // // já retorna a mensagem de erro automaticamente, então precisa apenas parar a execução do código
-    // return;
-// }
-
-
+# Uma outra abordagem seria não dar um 'exit' no meio do código, mas retornar um booleano e tratar o retorno onde for chamado.
+# Ou até mesmo criar outro método estático para isso, permitindo então parar todo o código e retornar o json ou tratar nos controllers.
 
 ?>

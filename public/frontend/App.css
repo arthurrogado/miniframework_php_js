@@ -313,11 +313,8 @@ iframe {
 /* BUTTONS */
 
 .btn {
-    width: 100%;
-    height: 2.5rem;
-    padding: 0;
+    padding: .3rem .5rem;
     font-size: 1rem;
-    font-weight: bold;
     color: white;
     border: none;
     border-radius: 10px;
@@ -329,10 +326,10 @@ iframe {
     opacity: .8;
 }
 .btn-danger {
-    background-color: #ff5f5f;
+    background-color: var(--danger-color);
 }
 .btn-primary {
-    background-color: #047c91;
+    background-color: var(--primary-color);
 }
 .btn-gray {
     background-color: gray;

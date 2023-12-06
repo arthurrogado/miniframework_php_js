@@ -47,6 +47,11 @@ class infoBox {
                 --info_dark: #1e679e;
             }
 
+            .infoBox${hash} span {
+                max-width: 100%;
+                word-wrap: break-word;
+            }
+
             .infoBox${hash} {
                 z-index: 9999;
                 width: 300px;

@@ -33,9 +33,6 @@ function atualizarSidebar(){
     httpClient.makeRequest('/api/usuario/check_login')
     .then(response => {
 
-        console.log('~~ RESPOSTA ATUALIZAR SIDEBAR | check_login')
-        console.log(response)
-
         if(response.ok){ // LOGADO
             let usuario = response.usuario
             document.querySelector('nav').classList.add('active')
@@ -64,8 +61,8 @@ function atualizarSidebar(){
                 ['/sobre_nos', 'Sobre Nós', 'fa-info-circle'],
                 ['/contato', 'Contato', 'fa-envelope'],
                 ['/produtos', 'Produtos', 'fa-th'],
-                ['/pessoas/listar', 'Pessoas', 'fa-users'],
-                ['/pessoas/criar', 'Criar Pessoa', 'fa-user-plus'],
+                ['/usuarios/listar', 'Usuários', 'fa-users'],
+                ['/usuarios/criar', 'Criar Usuário', 'fa-user-plus'],
                 ['/login', 'Login', 'fa-sign-in'],
                 ['/logout', 'Logout', 'fa-sign-out'],
             ])

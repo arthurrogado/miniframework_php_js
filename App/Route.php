@@ -40,52 +40,59 @@ class Route extends Bootstrap {
         );
 
 
+
+
         // PESSOAS //
-        $routes['pessoas'] = array(
-            'route' => '/pessoas',
-            'redirect' => '/pessoas/listar'
+        $routes['usuarios'] = array(
+            'route' => '/usuarios',
+            'redirect' => '/usuarios/listar'
         );
             // pages
         array_push($routes, [
-            'route' => '/pessoas/listar',
-            'controller' => 'Pages/Pessoas',
+            'route' => '/usuarios/listar',
+            'controller' => 'Pages/Usuarios',
             'action' => 'listar'
         ]);
         array_push($routes, [
-            "route" => "/pessoas/criar",
-            "controller" => "Pages/Pessoas",
+            "route" => "/usuarios/criar",
+            "controller" => "Pages/Usuarios",
             "action" => "criar"
         ]);
         array_push($routes, [
-            "route" => "/pessoas/visualizar",
-            "controller" => "Pages/Pessoas",
+            "route" => "/usuarios/visualizar",
+            "controller" => "Pages/Usuarios",
             "action" => "visualizar"
         ]);
             // api
         array_push($routes, [
-            'route' => '/api/pessoas/listar',
-            'controller' => 'PessoasController',
-            'action' => 'getPessoas'
+            'route' => '/api/usuarios/criar',
+            'controller' => 'UsuariosController',
+            'action' => 'criarUsuario'
         ]);
         array_push($routes, [
-            'route' => '/api/pessoas/criar',
-            'controller' => 'PessoasController',
-            'action' => 'createPessoa'
+            'route' => '/api/usuarios/listar',
+            'controller' => 'UsuariosController',
+            'action' => 'getUsuarios'
         ]);
         array_push($routes, [
-            'route' => '/api/pessoas/visualizar',
-            'controller' => 'PessoasController',
-            'action' => 'getPessoa'
+            'route' => '/api/usuarios/visualizar',
+            'controller' => 'UsuariosController',
+            'action' => 'visualizarUsuario'
         ]);
         array_push($routes, [
-            'route' => '/api/pessoas/editar',
-            'controller' => 'PessoasController',
+            'route' => '/api/usuarios/editar',
+            'controller' => 'UsuariosController',
             'action' => 'editar'
         ]);
         array_push($routes, [
-            'route' => '/api/pessoas/deletar',
-            'controller' => 'PessoasController',
-            'action' => 'deletarPessoa'
+            'route' => '/api/usuarios/mudar_senha',
+            'controller' => 'UsuariosController',
+            'action' => 'mudarSenhaUsuario'
+        ]);
+        array_push($routes, [
+            'route' => '/api/usuarios/excluir',
+            'controller' => 'UsuariosController',
+            'action' => 'excluirUsuario'
         ]);
 
 
