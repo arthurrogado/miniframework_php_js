@@ -1,8 +1,8 @@
-import HttpClient from "/App/App.js"
+import HttpClient from "/frontend/App.js"
 const httpClient = new HttpClient()
 
-import atualizarSidebar from "/App/Utils/atualizarSidebar.js"
-import atualizarInformacoesUsuario from "/App/Utils/atualizarInformacoesUsuario.js"
+import atualizarSidebar from "/frontend/Utils/atualizarSidebar.js"
+import atualizarInformacoesUsuario from "/frontend/Utils/atualizarInformacoesUsuario.js"
 
 atualizarSidebar()
 

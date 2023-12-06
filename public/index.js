@@ -1,7 +1,7 @@
 // index.js
-import HttpClient from "/App/App.js";
-import atualizarSidebar from "/App/Utils/atualizarSidebar.js";
-import atualizarInformacoesUsuario from "/App/Utils/atualizarInformacoesUsuario.js";
+import HttpClient from "/frontend/App.js";
+import atualizarSidebar from "/frontend/Utils/atualizarSidebar.js";
+import atualizarInformacoesUsuario from "/frontend/Utils/atualizarInformacoesUsuario.js";
 
 const httpClient = new HttpClient()
 document.querySelectorAll('nav').forEach(el => {

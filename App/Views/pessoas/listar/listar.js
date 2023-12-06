@@ -1,6 +1,6 @@
 // listar.js
 // /pessoas/listar
-import HttpClient from "/App/App.js"
+import HttpClient from "/frontend/App.js"
 const httpClient = new HttpClient()
 
 const deletePessoa = async (tdItem, nome = '') => {

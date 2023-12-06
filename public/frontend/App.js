@@ -135,7 +135,7 @@ urlLocationHandler()
 
 
 
-import Info from "../App/components/InfoBox.js"
+import Info from "../frontend/components/InfoBox.js"
 
 class HttpClient {
 

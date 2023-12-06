@@ -1,4 +1,4 @@
-import HttpClient from "/App/App.js";
+import HttpClient from "/frontend/App.js";
 
 const httpClient = new HttpClient();
 

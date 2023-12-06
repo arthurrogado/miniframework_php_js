@@ -1,4 +1,4 @@
-import HttpClient from '/App/App.js'
+import HttpClient from '/frontend/App.js'
 const httpClient = new HttpClient()
 
 let botao = document.querySelector('#alertar')
@@ -8,7 +8,7 @@ new httpClient.Info("Exemplo", 'success', 1500, '#info')
 new httpClient.Info('Danger', 'danger', 2000)
 new httpClient.Info('Warning', 'warning', 3000, '#info')
 
-import Botao from '/App/components/Botao.js'
+import Botao from '/frontend/components/Botao.js'
 Botao('#botao')
 Botao('#botao')
 Botao('#botao')

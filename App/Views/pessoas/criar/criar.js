@@ -1,7 +1,7 @@
-import HttpClient from "/App/App.js"
+import HttpClient from "/frontend/App.js"
 const httpClient = new HttpClient()
 
-import infoBox from "/App/components/InfoBox.js"
+import infoBox from "/frontend/components/InfoBox.js"
 
 let form = document.querySelector('#formCriarPessoa')
 form.addEventListener('submit', (e) => {
