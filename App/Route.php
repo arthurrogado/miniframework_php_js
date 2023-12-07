@@ -11,25 +11,29 @@ class Route extends Bootstrap {
 
         $routes['404'] = array(
             'route' => '/404',
-            'controller' => 'IndexController',
+            'controller' => 'Pages/Index',
             'action' => '_404'
         );
 
         $routes['home'] = array(
             'route' => '/',
-            'controller' => 'Pages/Home',
-            'action' => 'index'
+            'redirect' => '/home'
         );
+        array_push($routes, [
+            'route' => '/home',
+            'controller' => 'Pages/Index',
+            'action' => 'home'
+        ]);
 
         $routes['sobre_nos'] = array(
             'route' => '/sobre_nos',
-            'controller' => 'IndexController',
+            'controller' => 'Pages/Index',
             'action' => 'sobreNos'
         );
 
         $routes['contato'] = array(
             'route' => '/contato',
-            'controller' => 'IndexController',
+            'controller' => 'Pages/Index',
             'action' => 'contato'
         );
 

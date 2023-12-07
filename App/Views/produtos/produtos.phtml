@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
 <body>
 
     <h1>Produtos</h1>
 
-    <?php foreach($this->view->data as $produto): ?>
-        <h3><?= $produto['descricao'] ?></h3>
-        <p><?= $produto['preco'] ?></p>
-    <?php endforeach; ?>
-
+    <?php
+        $produtos = $this->view->data['data'];
+        foreach($produtos as $produto) {
+            echo "<strong>" . $produto->descricao . "</strong>";
+            echo "R$ " . $produto->preco . "<br><br>";
+        }
+    ?>
     
 </body>
 </html>

@@ -21,7 +21,7 @@ class AuthController {
     public function logout() {
         $user = Container::getModel("Usuario");
         if($user->logout()) {
-            echo json_encode(array('ok' => true, "message" => "Logout feito com sucesso", "redirect" => "/"));
+            echo json_encode(array('ok' => true, "message" => "Logout feito com sucesso", "redirect" => "/login"));
         } else {
             echo json_encode(array('ok' => false, "message" => "Erro ao fazer logout (???)"));
         }

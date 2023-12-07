@@ -1,5 +1,6 @@
 export default function Botao(parent = 'body') {
     let botao = document.createElement('button')
+    botao.classList.add('btn', 'btn-primary')
     botao.id = 'componenteBotao'
     botao.textContent = 'BOTÃO'
     botao.onclick = () => {
