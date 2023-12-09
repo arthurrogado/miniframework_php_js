@@ -42,20 +42,13 @@ ul {
     justify-content: space-between;
     margin-bottom: 30px;
     padding: 10px;
-    background-color: #ccc;
+    background-color: var(--primary-color);
+    color: white;
     text-align: center;
-    border-radius: 0 0 15px 15px;
+    border-radius: 1rem;
 }
 .title > h1 {
     flex-basis: 100%;
-}
-
-.section {
-    padding: 10px;
-    margin: 40px 0px 0px 0px;
-    background-color: #eee;
-    border-top: #969696 2px solid;
-    border-bottom: #969696 2px solid;
 }
 
 /* -------------- */
@@ -131,14 +124,14 @@ iframe {
 
 .input-field {
     position: relative;
-    padding: 10px;
+    padding: .8rem;
 }
 
 /* placeholder */
 .input-field label {
     position: absolute;
-    left: 15px;
-    top: 20px;
+    left: 1.5rem;
+    top: 1.5rem;
     opacity: .5;
     pointer-events: none;
     transition: .3s;
@@ -148,14 +141,6 @@ iframe {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 6px;
-    height: 2.5rem;
-}
-.input-field input {
-    height: 2.5rem;
-}
-
-.input-field input select option {
-    width: 100%;
     height: 2.5rem;
 }
 
@@ -176,9 +161,10 @@ iframe {
 .input-field select:disabled ~ label,
 .input-field select:valid ~ label,
 .input-field select:focus ~ label {
-    bottom: 50px;
+    top: 1.4rem;
+    left: 1rem;
     font-size: 0.9em;
-    color: blue;
+    color: var(--primary-color);
     transform: translateY(-25px);
     opacity: 1;
 }
@@ -200,7 +186,7 @@ iframe {
 }
 
 .dataTable thead, .detailTable thead {
-    background-color: blue;
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -313,14 +299,19 @@ iframe {
 /* BUTTONS */
 
 .btn {
-    padding: .3rem .5rem;
+    padding: .5rem;
+    margin: 1px .8rem;
     font-size: 1rem;
     color: white;
     border: none;
     border-radius: 10px;
     transition: .3s;
-    align-items: center;
     justify-content: center;
+    /* display: inline-flex; */
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
 }
 .btn:hover {
     opacity: .8;
@@ -405,7 +396,7 @@ iframe {
 
 /* criar animação de carregamento só com css, tipo um circulo girando */
 
-#loading {
+.loading {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.05);
@@ -415,7 +406,7 @@ iframe {
     z-index: 1000;
 }
 
-#loading::after {
+.loading::after {
     content: "";
     width: 50px;
     height: 50px;

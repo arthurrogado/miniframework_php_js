@@ -41,7 +41,7 @@ class UsuariosController {
     {
         $id = filter_input(INPUT_POST, 'id');
         $user = Container::getModel("Usuario");
-        $status = $user->visualizar($id);
+        $status = $user->visualizarUsuario($id);
         if($status['ok']) {
             echo json_encode(array('ok' => true, 'usuario' => $status['data']));
         } else {
@@ -56,6 +56,16 @@ class UsuariosController {
         $id = filter_input(INPUT_POST, 'id');
         $nome = filter_input(INPUT_POST, "nome", FILTER_DEFAULT);
         $usuario = filter_input(INPUT_POST, 'usuario');
+
+        if($id == 1) {
+            echo json_encode(array('ok' => false, 'message' => "Não é possível editar o usuário master"));
+            return;
+        }
+
+        if($usuario == "") {
+            echo json_encode(array('ok' => false, 'message' => "Usuário não pode ser vazio"));
+            return;
+        }
 
         $user = Container::getModel("Usuario");
         $status = $user->editarUsuario($id, $nome, $usuario);

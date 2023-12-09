@@ -86,7 +86,7 @@ class Route extends Bootstrap {
         array_push($routes, [
             'route' => '/api/usuarios/editar',
             'controller' => 'UsuariosController',
-            'action' => 'editar'
+            'action' => 'editarUsuario'
         ]);
         array_push($routes, [
             'route' => '/api/usuarios/mudar_senha',

@@ -2,14 +2,14 @@
     "compilerOptions": {
         "baseUrl": "./",
         "paths": {
-            "/App/*": [
-                "public/App/*"
+            "/frontend/*": [
+                "public/frontend/*"
             ],
-            "App/*": [
-                "public/App/*"
+            "frontend/*": [
+                "public/frontend/*"
             ],
             "/components/*": [
-                "public/App/components/*"
+                "public/frontend/components/*"
             ],
         }
     }

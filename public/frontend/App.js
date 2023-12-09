@@ -35,7 +35,7 @@ function updatePath(path, params = null) {
 
 const navigateTo = (path, params = null) => {
     // Colocar um #loading na main
-    document.querySelector(main).innerHTML = '<div id="loading"></div>'
+    document.querySelector(main).innerHTML = '<div class="loading"></div>'
 
 
     // If it is a window popstate event, get the path from the event
@@ -251,9 +251,22 @@ class HttpClient {
         }
     }
 
-    disableAllInputs() {
-        document.querySelectorAll('.input-field > input, .input-field > select, .input-field > textarea').forEach(input => {
+    disableAllInputs(parent = '.input-field') {
+        document.querySelectorAll(`${parent} > input, ${parent} > select, ${parent} > textarea`).forEach(input => {
             input.setAttribute('disabled', true)
+        })
+    }
+
+    readOnlyAllInputs(parent = '.input-field') {
+        document.querySelectorAll(`${parent} > input, ${parent} > select, ${parent} > textarea`).forEach(input => {
+            input.setAttribute('readonly', true)
+        })
+    }
+
+    activateAllInputs(parent = '.input-field') {
+        document.querySelectorAll(`${parent} > input, ${parent} > select, ${parent} > textarea`).forEach(input => {
+            input.removeAttribute('disabled')
+            input.removeAttribute('readonly')
         })
     }
 

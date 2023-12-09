@@ -169,11 +169,12 @@ class Table extends _Component {
             // actions
             if(this.actions.length > 0) {
 
-
                 let cell = document.createElement('td');
+                cell.style.textWrap = "nowrap";
+                
                 this.actions.forEach(action => {
                     let button = document.createElement('button');
-                    button.classList.add('btn', 'btn-primary');
+                    button.classList.add('btn', action.class ?? 'btn-primary');
                     button.innerHTML = action.text;
                     button.addEventListener('click', () => {
                         action.action(element.id);
