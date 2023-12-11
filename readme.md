@@ -62,11 +62,48 @@ O roteamento é feito através de uma array de rotas, que é passada para o cons
     - **frontend**: Contém os arquivos estáticos da aplicação, como css, js, imagens, etc.
 - **Vendor**: Contém os arquivos de dependências da aplicação, como o autoload do composer.
 
+## Sobre o miniframeword (vendor/MF)
+
+O miniframework é um framework simples, que contém as classes básicas para o funcionamento da aplicação. Ele está no namespace `MF`. Ele contém as seguintes classes:
+
 
 ## Utilização:
 
 Para demonstrar a utilização e implementação de novas funcionalidades, faremos um exemplo de uma aplicação de gerenciamento de usuários (que já está implementada).
 Seguiremos os seguintes passos:
 
-1. Criar o banco de dados.
-    - No caso é necessário criar e setar o banco, com as tabelas e determinadas colunas. Neste caso, o banco é o 'miniframework', a tabela é 'usuarios' e as colunas são 'id', 'nome', 'usuario' e 'senha'.
+### 1. Criar o banco de dados.
+
+No caso é necessário criar e setar o banco, com as tabelas e determinadas colunas. Neste caso, o banco é o 'miniframework', a tabela é 'usuarios' e as colunas são 'id', 'nome', 'usuario' e 'senha'.
+
+### 2. Criar o model de usuário.
+
+O model de usuário é o arquivo `App\Models\Usuario.php`. Ele é responsável por fazer a conexão com o banco de dados e fazer as operações de CRUD (Create, Read, Update, Delete).
+
+### 3. Criar o controller de usuário.
+
+O controller de usuário é o arquivo `App\Controllers\Usuarios.php`. Ele é responsável por fazer o tratamento das requisições e retornar os dados em json. Ele está no namespace `App\Controllers`. Os que estão em `App\Controllers\Pages` são os controllers de páginas, que fazem a renderização das views apenas. Estão ligados ao middleware de permissão de acesso, que verifica se o usuário está logado ou não e se tem determinados atributos; ainda não está implementado o middleware de permissão de acesso, apenas de condições.
+
+### 4. Criar o controller de páginas de usuário.
+
+O controller de páginas de usuário é o arquivo `App\Controllers\Pages\Usuarios.php`. Ele é responsável por fazer a renderização das views de usuário. Ele está no namespace `App\Controllers\Pages`, e extendem a classe `MF\Controller\Action` que faz a renderização.
+
+### 5. Criar as views de usuário.
+
+As views de usuário são os arquivos `App\Views\Usuarios\listar\index.phtml`, `App\Views\Usuarios\criar\index.phtml` e `App\Views\Usuarios\visualizar\index.phtml`. Elas são responsáveis por fazer a renderização da página de usuário. Elas estão no namespace `App\Views\[nome_do_controller]\[nome_da_view]`.
+
+### 6. Criar as rotas de usuário.
+
+As rotas de usuário são as rotas '/usuarios/listar', '/usuarios/criar' e '/usuarios/visualizar'. Elas estão no arquivo `App\Route\route.php`, que é o arquivo de roteamento da aplicação. Elas são responsáveis por fazer o roteamento das requisições para os controllers. O roteamento é feito através de uma array de rotas, que é passada para o construtor do Router. Cada rota é um array com os seguintes atributos:
+
+
+
+## Observações:
+
+- O arquivo `composer.json` contém as dependências do projeto. Para instalar as dependências, basta executar o comando `composer install` na raiz do projeto.
+
+- O arquivo `public/.htaccess` contém as configurações do apache. Ele é responsável por fazer o roteamento das requisições para o arquivo `public/index.php`, que é o arquivo que recebe as requisições http do front-end.
+
+- O arquivo `jsconfig.json` contém as configurações do vscode. Ele é responsável por fazer o autocomplete das classes e funções do projeto de forma correta, pois esse caminho foi desviado com o .htaccess.
+
+- O arquivo `public/api/index.php` é o arquivo que recebe as requisições http do front-end. Ele faz o tratamento das requisições e executa o Router, que é o arquivo que faz o roteamento das requisições para os controllers. O roteador está no namespace `App\Route`, e ele faz o roteamento das requisições para os controllers, que estão no namespace `App\Controllers`.
