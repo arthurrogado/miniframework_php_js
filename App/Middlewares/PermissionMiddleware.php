@@ -2,7 +2,6 @@
 
 // PermissionMiddleware.php
 
-// require_once './App/Model/Usuario.php';
 namespace App\Middlewares;
 use App\Models\Usuario;
 
