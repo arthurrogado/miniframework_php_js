@@ -8,14 +8,14 @@ class Usuario extends Model
     
     public function criarUsuario($nome, $usuario, $senha)
     {
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
+        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
         return $this->insert(
             "usuarios",
             [
                 "nome", "usuario", "senha"
             ],
             [
-                $nome, $usuario, $senha
+                $nome, $usuario, $senha_hash
             ]
         );
     }
@@ -64,6 +64,16 @@ class Usuario extends Model
             "usuarios",
             "id = $id"
         );
+    }
+
+    public function usuarioExiste($usuario)
+    {
+        $status = self::selectOne(
+            "usuarios",
+            ["*"],
+            "usuario = '$usuario'"
+        );
+        return $status['data'] != false;
     }
 
     public static function checkLogin() {

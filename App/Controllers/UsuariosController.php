@@ -15,9 +15,15 @@ class UsuariosController {
         $nome = filter_input(INPUT_POST, "nome", FILTER_DEFAULT);
         $usuario = filter_input(INPUT_POST, 'usuario');
         $senha = filter_input(INPUT_POST, 'senha');
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
 
         $user = Container::getModel("Usuario");
+        
+        // Verifica se o $usuario já existe
+        if( $user->usuarioExiste($usuario) ) {
+            echo json_encode(array('ok' => false, 'message' => "Usuário já existe"));
+            return;
+        }
+
         $status = $user->criarUsuario($nome, $usuario, $senha);
         if($status['ok']) {
             echo json_encode(array('ok' => true, 'message' => "Usuário criado com sucesso"));
@@ -82,7 +88,6 @@ class UsuariosController {
 
         $id = filter_input(INPUT_POST, 'id');
         $senha = filter_input(INPUT_POST, 'senha');
-        $senha = password_hash($senha, PASSWORD_DEFAULT);
 
         $user = Container::getModel("Usuario");
         $status = $user->mudarSenhaUsuario($id, $senha);

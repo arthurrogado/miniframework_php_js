@@ -158,6 +158,10 @@ class Modal extends _Component {
         });
     }
 
+    close() {
+        this.element.remove();
+    }
+
 }
 
 export default Modal;
