@@ -6,34 +6,44 @@ use MF\Model\Model;
 class Usuario extends Model
 {
     
-    public function criarUsuario($nome, $usuario, $senha)
+    public static function criarUsuario($nome, $usuario, $senha_hash)
     {
-        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        return $this->insert(
+        self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+        return self::insert(
             "usuarios",
             [
-                "nome", "usuario", "senha"
-            ],
-            [
-                $nome, $usuario, $senha_hash
+                "nome" => $nome, 
+                "usuario" => $usuario, 
+                "senha" => $senha_hash
             ]
         );
     }
 
-    public function getUsuarios()
+    public static function getUsuarios()
     {
-        return $this->select(
+        return self::select(
             "usuarios",
             ["id", "nome", "usuario"]
         );
     }
 
-    public function visualizarUsuario($id)
+    public static function getUsuariosFromEscritorio($id_escritorio)
     {
-        return $this->selectOne(
+        return self::select(
+            "usuarios",
+            ["id", "nome", "usuario"],
+            // "id_escritorio = '$id_escritorio'"
+            ["id_escritorio" => $id_escritorio]
+        );
+    }
+
+    public static function visualizarUsuario($id)
+    {
+        return self::selectOne(
             "usuarios",
             ["*"],
-            "id = $id"
+            // "id = $id"
+            ["id" => $id]
         );
     }
         
@@ -47,10 +57,21 @@ class Usuario extends Model
         );
     }
 
-    public function mudarSenhaUsuario($id, $senha)
+    public function editarUsuarioCnpj($id, $nome, $usuario, $cnpj_escritorio)
+    {
+        $sql = "UPDATE usuarios SET nome = :nome, usuario = :usuario, id_escritorio = (SELECT id FROM escritorios WHERE cnpj = :cnpj_escritorio) WHERE id = :id";
+        $stmt = self::$conn->prepare($sql);
+        $stmt->bindValue(":nome", $nome);
+        $stmt->bindValue(":usuario", $usuario);
+        $stmt->bindValue(":cnpj_escritorio", $cnpj_escritorio);
+        $stmt->bindValue(":id", $id);
+        return $stmt->execute();
+    }
+
+    public static function mudarSenhaUsuario($id, $senha)
     {
         $senha = password_hash($senha, PASSWORD_DEFAULT);
-        return $this->update(
+        return self::update(
             "usuarios",
             ["senha"],
             [$senha],
@@ -58,22 +79,23 @@ class Usuario extends Model
         );
     }
 
-    public function excluirUsuario($id)
+    public static function excluirUsuario($id)
     {
-        return $this->delete(
+        return self::delete(
             "usuarios",
-            "id = $id"
+            ["id" => $id]
         );
     }
 
-    public function usuarioExiste($usuario)
+    public static function usuarioExiste($usuario)
     {
         $status = self::selectOne(
             "usuarios",
             ["*"],
-            "usuario = '$usuario'"
+            // "usuario = '$usuario'"
+            ["usuario" => $usuario]
         );
-        return $status['data'] != false;
+        return $status != false;
     }
 
     public static function checkLogin() {
@@ -83,8 +105,11 @@ class Usuario extends Model
             // return self::getUsuario($_SESSION['usuario']->id);
             return $_SESSION['usuario'];
         } else {
-            return false;
+            if(isset($_SESSION['escritorio'])) {
+                return $_SESSION['escritorio'];
+            }
         }
+        return false;
     }
 
     public static function login($usuario, $senha) {

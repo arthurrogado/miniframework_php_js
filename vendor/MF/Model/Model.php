@@ -4,15 +4,20 @@ namespace MF\Model;
 // use App\Config\Config;
 use App\Config\Config;
 use App\Connection;
+use MF\Controller\MyAppException;
+use Throwable;
 
 abstract class Model {
 
-    protected $db;
-
     protected static $conn;
 
-    public function __construct(\PDO $db) {
-        $this->db = $db;
+    // public function __construct(\PDO $db) {
+    //     $this->db = $db;
+    // }
+
+    public function __construct() {
+        // Instanciar a conexão com o banco de dados
+        $this->getConn();
     }
 
     public function __get($attr) {
@@ -27,76 +32,158 @@ abstract class Model {
         if (!isset(self::$conn)) {
             self::$conn = Connection::getDB();
             return self::$conn;
-            // self::$conn =  new \PDO("mysql: host=".Config::$host."; dbname=".Config::$dbname, Config::$user, Config::$password);
+        } else {
+            return self::$conn;
         }
     }
 
     // Métodos genéricos para CRUD
 
-    public static function insert(string $table, array $columns, array $values) : array {
+    public static function insert(string $table, array $data) : int {
         try {
-            self::getConn();
-    
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+
+            $columns = array_keys($data);
+            $values = array_values($data);
+
             $preparedValues = array_map(function($value) {
                 return ($value !== null) ? "'$value'" : 'NULL';
             }, $values);
-    
+
             $query = "INSERT INTO $table (".implode(", ", $columns).") VALUES (". implode(", ", $preparedValues). ")";
             // like: "INSERT INTO users (name, email) VALUES ('Durov', 'durov@telegram')";
-            
+
             $stmt = self::$conn->prepare($query);
             $result = $stmt->execute();
             // retonar o id do registro inserido
             $id = self::$conn->lastInsertId();
-            return (["ok" => $result, "id" => $id]);
+            // return (["ok" => $result, "id" => $id]);
+            return $id ? $id : $result;
         } catch (\Throwable $th) {
-            return (["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()]);
+            // return (["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()]);
+            throw new MyAppException("Erro ao inserir registro: ", $th);
         }
     }
     
 
-    public static function select(string $table, array $columns, string $where = null) : array {
-
-        // Example: select("users", ["name", "email"], "id = 1");
+    public static function select(string $table, array $columns, array $where = [], string $finals = '') : array {
         try {
             self::getConn();
+    
             $query = "SELECT ".implode(", ", $columns)." FROM $table";
-            if($where){
-                $query .= " WHERE $where";
+            
+            // Exemplo de um where composto:
+            // $where = [
+            //     "id" => 1,
+            //     "OR" => [
+            //         "nome" => "João",
+            //         "idade" => 25
+            //     ]
+            // ];
+
+            if (!empty($where)) {
+                $query .= " WHERE ";
+    
+                $conditions = [];
+                foreach ($where as $key => $value) {
+                    // Verifica se é uma condição composta com operadores lógicos
+                    if (is_array($value)) { // se for um array, é uma condição composta
+                        $subconditions = []; // array para armazenar as condições compostas
+                        foreach ($value as $subkey => $subvalue) {
+                            $subconditions[] = "$subkey = :$subkey"; // popula o array com as subcondições
+                        }
+                        $conditions[] = "(" . implode(" OR ", $subconditions) . ")"; // 
+
+                    } else { // se não for um array, é uma condição simples
+                        $conditions[] = "$key = :$key";
+                    }
+                }
+    
+                $query .= implode(" AND ", $conditions);
             }
+
+            $query .= " $finals"; // Use finais para adicionar ORDER BY, LIMIT, etc.
+    
             $stmt = self::$conn->prepare($query);
+            
+            // Usar bindValue no where para evitar SQL injection
+            foreach ($where as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $subkey => $subvalue) {
+                        $stmt->bindValue(":$subkey", $subvalue);
+                    }
+                } else {
+                    $stmt->bindValue(":$key", $value);
+                }
+            }
+    
             $stmt->execute();
+    
             $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
-            return ["ok" => true, "data" => $result];
+            // array_push($result, $query);
+    
+            return $result;
         } catch (\Throwable $th) {
-            //throw $th;
-            return ["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()];
+            throw new MyAppException("Erro ao selecionar registro:", $th);
         }
     }
+    
 
-    public static function selectOne(string $table, array $columns, string $where = null) : array {
-
-        // Example: select("users", ["name", "email"], "id = 1");
+    public static function selectOne(string $table, array $columns, array $where = [])
+    {
         try {
-            self::getConn();
-            $query = "SELECT ".implode(", ", $columns)." FROM $table";
-            if($where){
-                $query .= " WHERE $where";
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+
+            $query = "SELECT " . implode(", ", $columns) . " FROM $table";
+            if ($where) {
+                // Usar bindValue no where
+                $query .= " WHERE ";
+                foreach ($where as $key => $value) {
+                    $query .= "$key = :$key";
+                    if (next($where)) {
+                        $query .= " AND ";
+                    }
+                }
+    
+                $stmt = self::$conn->prepare($query);
+                foreach ($where as $key => $value) {
+                    $stmt->bindValue(":$key", $value);
+                }
+            } else {
+                $stmt = self::$conn->prepare($query);
             }
-            $stmt = self::$conn->prepare($query);
+    
             $stmt->execute();
             $result = $stmt->fetch(\PDO::FETCH_OBJ);
-            return ["ok" => true, "data" => $result];
+    
+            return $result;
         } catch (\Throwable $th) {
-            //throw $th;
-            return ["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()];
+            throw new MyAppException("Erro ao selecionar registro: " . $th->getMessage() . " | line: " . $th->getLine() . " | " . $th->getFile());
         }
     }
 
-    public function update(string $table, array $columns, array $values, string $where){
-        // Example: update("users", ["name", "email"], ["Durov", "durov@telegram"], "id = 1");
+    public static function executeSelect(string $query, array $params = null) : array {
         try {
             self::getConn();
+            $stmt = self::$conn->prepare($query);
+            if($params){
+                foreach ($params as $key => $value) {
+                    $stmt->bindValue($key, $value);
+                }
+            }
+            $stmt->execute();
+            $result = $stmt->fetchAll(\PDO::FETCH_OBJ);
+            return $result;
+        } catch (\Throwable $th) {
+            throw new MyAppException("Erro ao executar seleção de dados", $th);
+        }
+    }
+
+    public static function update(string $table, array $columns, array $values, string $where){
+        // Example: update("users", ["name", "email"], ["Durov", "durov@telegram"], "id = 1");
+        try {
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+
             $query = "UPDATE $table SET ";
             for ($i=0; $i < count($columns); $i++) { 
                 $query .= "$columns[$i] = '$values[$i]' ";
@@ -106,22 +193,90 @@ abstract class Model {
             }
             $query .= " WHERE $where";
             $stmt = self::$conn->prepare($query);
-            $result = $stmt->execute();
-            return(["ok" => $result]);
+            return $stmt->execute();
         } catch (\Throwable $th) {
             //throw $th;
             return(["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()] );
         }
     }
 
-    public function delete(string $table, string $where){
+    public static function new_update(string $table, array $data, array $where) {
+        // Usar bind value para evitar SQL injection
+        // Exemplo: update("users", [{"name" => "Durov", "email" => "durov@telegram"}], ["id" => 1]);
+
+        try {
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+            $query = "UPDATE $table SET ";
+            foreach ($data as $key => $value) {
+                $query .= "$key = :$key";
+                if (next($data)) {
+                    $query .= ", ";
+                }
+            }
+            $query .= " WHERE ";
+            foreach ($where as $key => $value) {
+                $query .= "$key = :$key";
+                if (next($where)) {
+                    $query .= " AND ";
+                }
+            }
+            $stmt = self::$conn->prepare($query);
+            foreach ($data as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            foreach ($where as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+            $result = $stmt->execute();
+            return $result;
+        } catch (\Throwable $th) {
+            //throw $th;
+            return (["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()]);
+        }
+        
+    }
+
+    public static function delete(string $table, array $where = []) {
+        // Example: delete("users", ["id" => 1]);
+        try {
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
+            $query = "DELETE FROM $table";
+            if($where){
+                $query .= " WHERE ";
+                foreach ($where as $key => $value) { // Usar bindValue no where
+                    $query .= "$key = :$key";
+                    if (next($where)) {
+                        $query .= " AND ";
+                    }
+                }
+                $query .= " LIMIT 1;"; // Limitar a 1 registro para evitar "DELETE FROM table WHERE" que deletaria tudo
+                $stmt = self::$conn->prepare($query);
+                foreach ($where as $key => $value) {
+                    $stmt->bindValue(":$key", $value);
+                }
+                // var_dump($query);
+            } else {
+                // Se não houver where, não continuar, pois se não deleta tudo.
+                return false;
+            }
+            
+            $result = $stmt->execute();
+            return $result;
+        } catch (\Throwable $th) {
+            //throw $th;
+            // return (["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()]);
+            throw new MyAppException("Erro ao deletar registro.", $th);
+        }
+    }
+
+    public static function delete2(string $table, string $where){
         // Example: delete("users", "id = 1");
         try {
-            self::getConn();
+            self::getConn(); // Usar esse método estático para que a conexão seja feita, já que o método é estático (não depende de instância da classe)
             $query = "DELETE FROM $table WHERE $where";
             $stmt = self::$conn->prepare($query);
             $result = $stmt->execute();
-            return (["ok" => $result]);
+            return $result;
         } catch (\Throwable $th) {
             //throw $th;
             return (["ok" => false, "message" => $th->getMessage(), "line" => $th->getLine()]);

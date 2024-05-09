@@ -1,7 +1,8 @@
 <?php
 
 namespace App;
-use App\Config\Config;
+use App\Config\Secrets;
+use MF\Controller\MyAppException;
 
 class Connection {
 
@@ -9,15 +10,18 @@ class Connection {
         try{
 
             $conn = new \PDO(
-                "mysql: host=".Config::$host."; dbname=".Config::$dbname,
-                Config::$user,
-                Config::$password
+                "mysql: host=".Secrets::$host."; dbname=".Secrets::$dbname,
+                Secrets::$user,
+                Secrets::$password
             );
 
             return $conn;
 
-        } catch(\PDOException $e) {
-            echo $e->getMessage();
+        } catch(\Throwable $th) {
+            // echo $e->getMessage();
+            // return null;
+            // throw new \Exception("Erro ao conectar com o banco de dados.");
+            throw new MyAppException("Erro ao conectar com o banco de dados.", $th);
         }
     }
 

@@ -3,6 +3,8 @@
 namespace App\Controllers;
 use MF\Model\Container;
 use App\Middlewares\PermissionMiddleware;
+use App\Models\Usuario;
+use MF\Controller\MyAppException;
 
 class UsuariosController {
 
@@ -19,12 +21,9 @@ class UsuariosController {
         $user = Container::getModel("Usuario");
         
         // Verifica se o $usuario já existe
-        if( $user->usuarioExiste($usuario) ) {
-            echo json_encode(array('ok' => false, 'message' => "Usuário já existe"));
-            return;
-        }
+        if( Usuario::usuarioExiste($usuario) ) new MyAppException("Usuário já existe");
 
-        $status = $user->criarUsuario($nome, $usuario, $senha);
+        $status = Usuario::criarUsuario($nome, $usuario, $senha);
         if($status['ok']) {
             echo json_encode(array('ok' => true, 'message' => "Usuário criado com sucesso"));
         } else {

@@ -2,8 +2,6 @@
 
 namespace MF\Controller;
 
-use function PHPSTORM_META\type;
-
 abstract class Action {
     
     protected $view;
@@ -67,8 +65,6 @@ abstract class Action {
         $css = ob_get_clean();
         $css = (string)$css;
         $result['css'] = $css;
-
-
         
         // get js
         ob_start();
@@ -85,10 +81,6 @@ abstract class Action {
         $result['view'] = $view;
 
         echo json_encode($result);
-
-        // echo json_encode($result);
-
-        
 
     }
 
