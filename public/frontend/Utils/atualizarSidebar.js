@@ -22,10 +22,17 @@ function popularMenuItems(items){
     if(!navigation) return;
 
     navigation.innerHTML = '';
-    items.forEach(item => {
-        let nav_item = returnNavItem(item[0], item[1], item[2]);
-        navigation.appendChild(nav_item);
-    });
+    items.forEach(grupo => {
+        let caixa_itens = document.createElement('div')
+        caixa_itens.classList.add('caixa_itens')
+        grupo.forEach(item => {
+
+            let [href, nome, icon] = item
+            caixa_itens.append(returnNavItem(href, nome, icon))
+            
+        })
+        navigation.append(caixa_itens)
+    })
 }
 
 function atualizarSidebar(){
@@ -42,13 +49,36 @@ function atualizarSidebar(){
             
             if(usuario.id == 1){ // ADMIN
                 itens = [
-                    ['/configuracoes', 'Configurações', 'fa-cog'],
+                    [['/home', 'Home', 'fa-home']],
+                    [
+                        ['/usuarios/listar', 'Usuários', 'fa-users'],
+                        ['/usuarios/criar', 'Criar Usuário', 'fa-user-plus'],
+                    ],
+
+                    [
+                        ['/escritorios/listar', 'Escritórios', 'fa-building'],
+                    ],
+
+                    [['/configuracoes', 'Configurações', 'fa-cog']],
                 ];
 
-                // Usuário comum
-            } else {
+                // ESCRITÓRIO
+            } else if (usuario.cnpj) {
                 itens = [
-                    ['/home', 'Home', 'fa-solid fa-home'],
+                    [['/home', 'Home', 'fa-home']],
+                    [['/usuarios/listar', 'Usuários', 'fa-users']],
+                    [['/escritorio/visualizar?id='+usuario.id, "Meu escritório", 'fa-building']],
+                    [['/carteiras/listar', 'Carteiras', 'fa-money']],
+                ]
+            }
+
+                // USUÁRIO
+            else {
+                itens = [
+                    [['/home', 'Home', 'fa-solid fa-home']],
+                    [
+                        ['/caixas', 'Caixas financeiros', 'fas fa-money']
+                    ]
                 ]
             }
 
@@ -56,16 +86,7 @@ function atualizarSidebar(){
             
             // popularMenuItems(itens)
 
-            popularMenuItems([
-                ['/home', 'Home', 'fa-home'],
-                ['/sobre_nos', 'Sobre Nós', 'fa-info-circle'],
-                ['/contato', 'Contato', 'fa-envelope'],
-                ['/produtos', 'Produtos', 'fa-th'],
-                ['/usuarios/listar', 'Usuários', 'fa-users'],
-                ['/usuarios/criar', 'Criar Usuário', 'fa-user-plus'],
-                ['/login', 'Login', 'fa-sign-in'],
-                ['/logout', 'Logout', 'fa-sign-out'],
-            ])
+            popularMenuItems(itens)
             
         }
 
